@@ -1,0 +1,11 @@
+.MyBets span {
+  margin-right: 30px;
+}
+
+.myBetsOption {
+  text-transform: uppercase;
+}
+
+.myBetsResult {
+  float: right;
+}

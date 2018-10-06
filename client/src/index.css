@@ -1,0 +1,44 @@
+body {
+  margin: 130px 0 0 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+  background: #f8f8f8;
+}
+
+@media (min-width: 768px) {
+  body{
+    margin: 110px 0 0 0;
+  }
+}
+
+a {
+  color: #555;
+}
+
+a:hover {
+  color: #333;
+}
+
+a:hover,
+a:focus {
+  outline: none;
+}
+/* TODO that's usually not a good thing http://www.outlinenone.com/ */
+
+h1, h2, h3 {
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+.mainLayout {
+  padding: 20px 15px 40px;
+  min-height: 390px;
+}
+
+/* Overwrite bootstrap default max-width (to a smaller value) on large screens */
+.container {
+  max-width: 960px;
+}

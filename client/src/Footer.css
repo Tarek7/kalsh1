@@ -1,0 +1,34 @@
+.Footer {
+  /*background: #f7f7f7;*/
+  background: #f2f2f2;
+  border-top: 3px solid #e8e8e8;
+}
+
+.Footer h5 {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 25px;
+  float: right;
+}
+
+.Footer img {
+  width: 16px;
+  margin-right: 5px;
+}
+
+.footerIcons {
+  text-align: right;
+}
+
+.footerIcons div {
+  display: inline-block;
+}
+
+.footerLinks {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.footerLinks a {
+  margin-right: 15px;
+}

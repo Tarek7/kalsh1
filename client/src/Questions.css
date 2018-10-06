@@ -1,0 +1,100 @@
+.questionsHeader {
+  width: 100%;
+  display: inline-block;
+}
+
+.questionsHeader h2 {
+  float: left;
+}
+
+.questionsHeader Button {
+  float: right;
+}
+
+.Questions .input-group {
+  display: inline-block;
+}
+
+.questionsSearch {
+  width: 200px;
+  height: 32px;
+  font-size: 13px;
+  padding: 5px 0;
+  float: right;
+  margin-bottom: -7px;
+}
+
+.Questions .list-group .list-group-item:hover  {
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.Questions .list-group .list-group-item.notcollapsed:hover  {
+  cursor: pointer;
+}
+
+.betOverview {
+  display: none;
+  text-align: center;
+}
+
+.betOverviewVisible {
+  display: flex;
+  cursor: default;
+}
+
+.settleDateInfo {
+  text-align: right;
+  font-size: 0.8rem;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.betOptionColumn h4 {
+  font-size: 1.9rem;
+  display: inline-block;
+}
+
+.buttonAddBet {
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 3px 10px 0;
+  display: inline;
+  vertical-align: 3px;
+  display: inline-block;
+  float: right;
+}
+
+.betDetails {
+  background: #f8f8f8;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.betDetails:hover {
+  background: #f2f2f2;
+}
+
+.betButton {
+  margin-left: 10px;
+  float: right;
+  font-size: 15px;
+  padding: 4px 6px 1px 6px;
+}
+
+.oddsText {
+  float: left;
+}
+
+.questionChevronIcon {
+  float: right;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .betOverview .betOptionColumn:last-of-type {
+    border-left: 1px solid #ddd;
+  }
+}
