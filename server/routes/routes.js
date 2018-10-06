@@ -51,6 +51,26 @@ var appRouter = function (app, passport) {
     });
   });
 
+  app.post('/settle_yes', (req, res, next) => {
+    console.log('Settling for yes');
+    console.log(req.params.question_primary_id)
+    models.question.update({
+        result: 'yes' }, { where: { id: req.body.question_primary_id }}
+    )
+    console.log(models.question.findOne({where: {id: req.body.question_primary_id}}))
+    models.bet_primary.findAll({ where: { question_id: req.body.question_primary_id } })
+    res.status(200).json({ 'message': 'Ok' });
+  });
+
+  app.post('/settle_no', (req, res, next) => {
+    models.question.update({
+        result: 'no' }, { where: { id: req.body.question_primary_id }}
+    )
+    console.log(models.question.findOne({where: {id: req.body.question_primary_id}}))
+    models.bet_primary.findAll({ where: { question_id: req.body.question_primary_id } })
+    res.status(200).json({ 'message': 'Ok' });
+  });
+
   app.get('/mybets', (req, res) => {
     let conditions = {
       order: sequelize.literal("createdAt DESC")
