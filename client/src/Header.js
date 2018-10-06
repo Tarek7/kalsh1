@@ -53,6 +53,11 @@ class Header extends Component {
                   <NavItem>
                     <NavLink tag={RRNavLink} to="/about/">About</NavLink>
                   </NavItem>
+                  { !currentUser.hasOwnProperty("isAdmin") &&
+                    <NavItem>
+                      <NavLink tag={RRNavLink} to="/admin/">Admin</NavLink>
+                    </NavItem>
+                  }
                   { !currentUser.hasOwnProperty("id") &&
                     <NavItem>
                       <NavLink tag={RRNavLink} to="/signup/">Sign Up</NavLink>

@@ -8,6 +8,7 @@ import Questions from './Questions';
 import SignUp from './SignUp';
 import Login from './Login';
 import MyBets from './MyBets';
+import Admin from './Admin'
 import { About, Contact, Faq, Help, NoMatch } from './StaticPages';
 import { Container } from 'reactstrap';
 import { Store } from './store';
@@ -47,6 +48,7 @@ ReactDOM.render((
           <AppRoute path="/questions/:category" layout={MainLayout} component={Questions} />
           <AppRoute path="/signup" layout={MainLayout} component={SignUp} />
           <AppRoute path="/login" layout={MainLayout} component={Login} />
+          <AppRoute path="/admin" layout={MainLayout} component={Admin} />
           <AppRoute layout={MainLayout} component={NoMatch} />
         </Switch>
       </div>
