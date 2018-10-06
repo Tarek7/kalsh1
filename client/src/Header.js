@@ -63,7 +63,12 @@ class Header extends Component {
                       <NavLink onClick={this.toggleDisplayLoginBox} className="headerLoginLink">Login</NavLink>
                     </NavItem>
                   : <NavItem>
-                      <NavLink tag={RRNavLink} to="/mybets/">My Bets {currentUser.email}</NavLink>
+                      <NavLink tag={RRNavLink} to="/mybets/">My Bets</NavLink>
+                    </NavItem>
+                  }
+                  { currentUser.hasOwnProperty("id") &&
+                    <NavItem>
+                      <NavLink tag={RRNavLink} to="/mybets/"> {currentUser.name}</NavLink>
                     </NavItem>
                   }
                 </Nav>
