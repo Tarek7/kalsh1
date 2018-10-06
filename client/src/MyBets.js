@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem } from 'reactstrap';
+import { ListGroup, ListGroupItem, Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import ContentLoader from "react-content-loader";
 import axios from 'axios';
 import Moment from 'react-moment';
@@ -29,7 +29,8 @@ class MyBets extends Component {
       error: false,
       isLoading: true,
       title: undefined,
-      bets: []
+      bets: [],
+			balance: 0
     }
   }
 
@@ -39,7 +40,7 @@ class MyBets extends Component {
 
   loadBets() {
 		const { currentUser } = this.props;
-    this.setState({ isLoading: true, error: false });
+    this.setState({ isLoading: true, error: false, balance: currentUser.balance });
     axios.get(`http://localhost:4000/mybets`, { params: {
       user_id: currentUser.id
     }})
@@ -96,6 +97,43 @@ class MyBets extends Component {
     }
   }
 
+	renderBalance() {
+		const { balance, isLoading, error } = this.state;
+		if (error === true) {
+			return (
+				<div>
+					<h4>Error!</h4>
+					<span className="closeBButton" onClick={this.props.close}>x</span>
+				</div>
+			)
+		} else if (isLoading === false && balance != undefined) {
+					return (
+						<div className="Balance">
+							<Button>Balance: ${balance}</Button>
+						</div>
+					)
+				}
+		}
+		// return (
+		// 	<div className="BalanceBg">
+		// 		<div className="Balance">
+		// 			{ error &&
+		// 				<div>
+		// 					<h4>Error!</h4>
+		// 					<span className="closeBButton" onClick={this.props.close}>x</span>
+		// 				</div>
+		// 			}
+		// 			{ !error && !isLoading
+		// 				<div>
+		// 						<Button>Suggest Question</Button>
+		// 				</div>
+		// 			}
+		// 			<div className="clearfix"></div>
+		// 		</div>
+		// 	</div>
+		// )
+	// }
+
   // TODO If category doesn't exist, redirect to home or 404 page.
   render() {
     return (
@@ -104,6 +142,7 @@ class MyBets extends Component {
           <h2>My Bets</h2>
         </div>
         { this.renderBets() }
+				{ this.renderBalance() }
       </div>
     );
   }
