@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Button, ListGroup, ListGroupItem, Row, Col } from 'reactstrap';
+import { ListGroup, ListGroupItem } from 'reactstrap';
 import ContentLoader from "react-content-loader";
 import axios from 'axios';
 import Moment from 'react-moment';
-import classNames from 'classnames';
+import { connect } from 'react-redux';
 import './MyBets.css';
 
 const MyLoader = props => (
@@ -21,7 +21,7 @@ const MyLoader = props => (
 	</ContentLoader>
 )
 
-export default class MyBets extends Component {
+class MyBets extends Component {
   constructor(props) {
     super(props);
 
@@ -38,9 +38,10 @@ export default class MyBets extends Component {
   }
 
   loadBets() {
+		const { currentUser } = this.props;
     this.setState({ isLoading: true, error: false });
     axios.get(`http://localhost:4000/mybets`, { params: {
-      user_id: 1
+      user_id: currentUser.id
     }})
     .then(res => {
       const bets = res.data.bets;
@@ -55,6 +56,7 @@ export default class MyBets extends Component {
 
   renderBets() {
     const { bets, isLoading, error } = this.state;
+
     if (error === true) {
       return(<div>An error ocurred. Please reload the page.</div>);
     } else if (isLoading === true) {
@@ -64,21 +66,21 @@ export default class MyBets extends Component {
         <div>
            <ListGroup className="MyBets">
              {bets.map((bet) => (
-               <ListGroupItem key={"bet-" + bet.id}>
+               <ListGroupItem key={"bet-" + bet.id + "-" + bet.option}>
                <b>{bet.question.title}</b>
                <br />
-               {bet.type === "primary" ?
+               {bet.option === "yes" ?
                  <div>
-                   <span className="myBetsOption">{bet.option}</span>
-                   <span>{bet.odds_numerator} to {bet.odds_denominator}</span>
+                   <span className="myBetsOption">YES</span>
+                   <span>{bet.yes_odds_numerator} to {bet.yes_odds_denominator}</span>
                    <span>${bet.amount}</span>
                    <span><Moment format="MM/DD HH:mm">{bet.question.settle_date}</Moment></span>
                    <div className="myBetsResult">NOT SETTLED</div>
                  </div>
                :
                  <div>
-                   <span className="myBetsOption">{bet.primary_bet.option === "yes" ? "no":"yes"}</span>
-                   <span>{bet.primary_bet.odds_numerator} to {bet.primary_bet.odds_denominator}</span>
+                   <span className="myBetsOption">NO</span>
+                   <span>{bet.yes_odds_denominator} to {bet.yes_odds_numerator}</span>
                    <span>${bet.amount}</span>
                    <span><Moment format="MM/DD HH:mm">{bet.question.settle_date}</Moment></span>
                    <div className="myBetsResult">NOT SETTLED</div>
@@ -96,7 +98,6 @@ export default class MyBets extends Component {
 
   // TODO If category doesn't exist, redirect to home or 404 page.
   render() {
-    const { title, displayNewQuestion, newBetQuestion, newBetDefaultValue, pickUpBetData } = this.state;
     return (
       <div className="Questions">
         <div className="questionsHeader">
@@ -107,3 +108,9 @@ export default class MyBets extends Component {
     );
   }
 }
+
+const mapStateToProps = store => ({
+  currentUser: store.clickState.currentUser
+});
+
+export default connect(mapStateToProps)(MyBets);

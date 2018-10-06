@@ -56,48 +56,34 @@ var appRouter = function (app, passport) {
       order: sequelize.literal("createdAt DESC")
     };
 
-    let betsData = [];
+    let matchesData = [];
 
-    models.bet_primary.findAll({ where: { user_id: req.query.user_id } })
-    .then(bets => {
-      bets.forEach(bet => {
-        bet_data = bet.get({ plain: true });
-        bet_data["type"] = "primary";
-        betsData.push(bet_data);
+    models.match.findAll({ where: { yes_user_id: req.query.user_id } })
+    .then(matches => {
+      matches.forEach(match => {
+        match_data = match.get({ plain: true });
+        match_data["option"] = "yes";
+        matchesData.push(match_data);
       });
-      return betsData;
+      return matchesData;
     })
-    .then((betsData) => {
-      return models.bet_against.findAll({ where: { user_id: req.query.user_id } })
-      .then(bets => {
-        bets.forEach(bet => {
-          bet_data = bet.get({ plain: true });
-          bet_data["type"] = "against";
-          betsData.push(bet_data);
+    .then((matchesData) => {
+      return models.match.findAll({ where: { no_user_id: req.query.user_id } })
+      .then(matches => {
+        matches.forEach(match => {
+          match_data = match.get({ plain: true });
+          match_data["option"] = "no";
+          matchesData.push(match_data);
         });
-        return betsData;
+        return matchesData;
       })
     })
-    .then((bets) => {
-      return Promise.all(bets.map((bet_data) => {
-        if (bet_data["type"] === "primary") {
-          return bet_data;
-        } else {
-          return models.bet_primary.findOne({ where: { id: bet_data.bet_primary_id } })
-            .then(bet_primary => {
-              bet_data["primary_bet"] = bet_primary.get({ plain: true });
-              bet_data["question_id"] = bet_data["primary_bet"].question_id;
-              return bet_data;
-            });
-          }
-      }));
-    })
-    .then((bets) => {
-      return Promise.all(bets.map((bet_data) => {
-        return models.question.findOne({ where: { id: bet_data.question_id } })
+    .then((matchesData) => {
+      return Promise.all(matchesData.map((match_data) => {
+        return models.question.findOne({ where: { id: match_data.question_id } })
           .then(question => {
-            bet_data["question"] = question.get({ plain: true });
-            return bet_data;
+            match_data["question"] = question.get({ plain: true });
+            return match_data;
           });
       }));
     })
@@ -167,7 +153,7 @@ var appRouter = function (app, passport) {
     });
   });
 
-  app.post('/bet_against', (req, res, next) => {
+  app.post('/pick_bet', (req, res, next) => {
     if (!req.body || !req.body.user_id) {
       return next({ status: 400, message: 'user_id is required' });
     }
@@ -179,13 +165,35 @@ var appRouter = function (app, passport) {
     }
 
     // TODO use transactions
-    models.bet_against.create({
-      user_id: req.body.user_id,
-      bet_primary_id: req.body.bet_primary_id,
-      amount: req.body.amount,
+    models.bet_primary.update({
+        available_amount: sequelize.literal('available_amount -' + req.body.amount) }, { where: { id: req.body.bet_primary_id }}
+    )
+    .then(() =>
+      models.bet_primary.findOne({ where: { id: req.body.bet_primary_id } })
+    )
+    .then((bet_primary) => {
+      let matchData;
+      if (bet_primary.option === "yes") {
+        matchData = {
+          yes_user_id: bet_primary.user_id,
+          no_user_id: req.body.user_id,
+          question_id: bet_primary.question_id,
+          yes_odds_numerator: bet_primary.odds_numerator,
+          yes_odds_denominator: bet_primary.odds_denominator,
+          amount: req.body.amount
+        }
+      } else {
+        matchData = {
+          yes_user_id: req.body.user_id,
+          no_user_id: bet_primary.user_id,
+          question_id: bet_primary.question_id,
+          yes_odds_numerator: bet_primary.odds_denominator,
+          yes_odds_denominator: bet_primary.odds_numerator,
+          amount: req.body.amount
+        }
+      }
+      return models.match.create(matchData);
     })
-    .then(() => models.bet_primary.update({
-      available_amount: sequelize.literal('available_amount -' + req.body.amount) }, { where: { id: req.body.bet_primary_id }}))
     .then(newBet => {
       res.status(200).json({ newBet, success: true });
     }).catch(error => {

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Col, Row, Button, Form, FormGroup, Label, Input, InputGroupAddon, InputGroup } from 'reactstrap';
 import './PickUpBet.css';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 // TODO some css classes are duplicated from newquestion and PickUpBet. should combine them.
-export default class PickUpBet extends Component {
+class PickUpBet extends Component {
   constructor(props) {
     super(props);
 
@@ -25,9 +26,10 @@ export default class PickUpBet extends Component {
 
   handleSubmit() {
     const { amount } = this.state;
+    const { currentUser } = this.props;
     this.setState({ isWaitingResponse: true, error: false, success: false });
-    axios.post(`http://localhost:4000/bet_against`, {
-      user_id: 1,
+    axios.post(`http://localhost:4000/pick_bet`, {
+      user_id: currentUser.id,
       amount,
       bet_primary_id: this.props.data.bet.id
     })
@@ -83,7 +85,7 @@ export default class PickUpBet extends Component {
                   </Col>
                   <Col md={7}>
                     <FormGroup>
-                      <h6>{data.bet.odds_numerator} to {data.bet.odds_denominator} odds</h6>
+                      <h6>{data.bet.odds_denominator} to {data.bet.odds_numerator} odds</h6>
                       <h6>Total Amount: ${data.bet.available_amount}</h6>
                       <br />
                       <Label for="amount">Your amount</Label>
@@ -105,3 +107,9 @@ export default class PickUpBet extends Component {
     )
   }
 }
+
+const mapStateToProps = store => ({
+  currentUser: store.clickState.currentUser
+});
+
+export default connect(mapStateToProps)(PickUpBet);

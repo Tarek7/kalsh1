@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Col, Row, Button, Form, FormGroup, Label, Input, InputGroupAddon, InputGroup } from 'reactstrap';
 import './NewBet.css';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 // TODO share some classes with newquestion
-export default class NewBet extends Component {
+class NewBet extends Component {
   constructor(props) {
     super(props);
 
@@ -28,9 +29,10 @@ export default class NewBet extends Component {
 
   handleSubmit() {
     const { odds_numerator, odds_denominator, option, amount } = this.state;
+    const { currentUser } = this.props;
     this.setState({ isWaitingResponse: true, error: false, success: false });
     axios.post(`http://localhost:4000/bet_primary`, {
-      user_id: 1,
+      user_id: currentUser.id,
       odds_numerator,
       odds_denominator,
       option,
@@ -121,3 +123,9 @@ export default class NewBet extends Component {
     )
   }
 }
+
+const mapStateToProps = store => ({
+  currentUser: store.clickState.currentUser
+});
+
+export default connect(mapStateToProps)(NewBet);

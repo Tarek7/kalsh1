@@ -10,6 +10,8 @@ import Login from './Login';
 import MyBets from './MyBets';
 import { About, Contact, Faq, Help, NoMatch } from './StaticPages';
 import { Container } from 'reactstrap';
+import { Store } from './store';
+import { Provider } from 'react-redux';
 import './index.css';
 //import registerServiceWorker from './registerServiceWorker';
 
@@ -32,21 +34,23 @@ const MainLayout = props => (
 )
 
 ReactDOM.render((
-  <BrowserRouter>
-    <div>
-      <Switch>
-        <Route exact path="/" render={() => (<Redirect to="/questions/all"/>)} />
-        <AppRoute path="/about" layout={MainLayout} component={About} />
-        <AppRoute path="/contact" layout={MainLayout} component={Contact} />
-        <AppRoute path="/faq" layout={MainLayout} component={Faq} />
-        <AppRoute path="/help" layout={MainLayout} component={Help} />
-        <AppRoute path="/mybets" layout={MainLayout} component={MyBets} />
-        <AppRoute path="/questions/:category" layout={MainLayout} component={Questions} />
-        <AppRoute path="/signup" layout={MainLayout} component={SignUp} />
-        <AppRoute path="/login" layout={MainLayout} component={Login} />
-        <AppRoute layout={MainLayout} component={NoMatch} />
-      </Switch>
-    </div>
-  </BrowserRouter>
+  <Provider store={Store}>
+    <BrowserRouter>
+      <div>
+        <Switch>
+          <Route exact path="/" render={() => (<Redirect to="/questions/all"/>)} />
+          <AppRoute path="/about" layout={MainLayout} component={About} />
+          <AppRoute path="/contact" layout={MainLayout} component={Contact} />
+          <AppRoute path="/faq" layout={MainLayout} component={Faq} />
+          <AppRoute path="/help" layout={MainLayout} component={Help} />
+          <AppRoute path="/mybets" layout={MainLayout} component={MyBets} />
+          <AppRoute path="/questions/:category" layout={MainLayout} component={Questions} />
+          <AppRoute path="/signup" layout={MainLayout} component={SignUp} />
+          <AppRoute path="/login" layout={MainLayout} component={Login} />
+          <AppRoute layout={MainLayout} component={NoMatch} />
+        </Switch>
+      </div>
+    </BrowserRouter>
+  </Provider>
 ), document.getElementById('root'))
 //registerServiceWorker();

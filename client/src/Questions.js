@@ -152,7 +152,7 @@ export default class Questions extends Component {
                   <Button onClick={() => this.displayNewBet(question, "yes")} className="buttonAddBet">+</Button>
                   {question.primary_bets.filter(bet => bet.option === "no" && bet.available_amount > 0).map((bet) => (
                     <div className="betDetails" key={"betdetails-" + bet.id}>
-                      <span className="oddsText">{bet.odds_numerator} to {bet.odds_denominator}</span>
+                      <span className="oddsText">{bet.odds_denominator} to {bet.odds_numerator}</span>
                       ${bet.available_amount}
                       <Button className="betButton" onClick={() => this.displayPickUpBet(question.title, "yes", bet)}>BET</Button>
                     </div>
@@ -163,7 +163,7 @@ export default class Questions extends Component {
                   <Button onClick={() => this.displayNewBet(question, "no")} className="buttonAddBet">+</Button>
                   {question.primary_bets.filter(bet => bet.option === "yes" && bet.available_amount > 0).map((bet) => (
                     <div className="betDetails" key={"betdetails-" + bet.id}>
-                      <span className="oddsText">{bet.odds_numerator} to {bet.odds_denominator}</span>
+                      <span className="oddsText">{bet.odds_denominator} to {bet.odds_numerator}</span>
                       ${bet.available_amount}
                       <Button className="betButton" onClick={() => this.displayPickUpBet(question.title, "no", bet)}>BET</Button>
                     </div>

@@ -1,15 +1,27 @@
 module.exports = function(sequelize, Sequelize) {
-  var BetAgainst = sequelize.define('bet_against', {
+  var Match = sequelize.define('match', {
     id: {
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    user_id: {
+    yes_user_id: {
       type: Sequelize.INTEGER,
       notEmpty: true
     },
-    bet_primary_id: {
+    no_user_id: {
+      type: Sequelize.INTEGER,
+      notEmpty: true
+    },
+    question_id: {
+      type: Sequelize.INTEGER,
+      notEmpty: true
+    },
+    yes_odds_numerator: {
+      type: Sequelize.INTEGER,
+      notEmpty: true
+    },
+    yes_odds_denominator: {
       type: Sequelize.INTEGER,
       notEmpty: true
     },
@@ -19,5 +31,5 @@ module.exports = function(sequelize, Sequelize) {
     }
   });
 
-  return BetAgainst;
+  return Match;
 }
