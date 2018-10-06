@@ -51,9 +51,13 @@ module.exports = function(sequelize, Sequelize) {
     status: {
       type: Sequelize.ENUM('active', 'inactive'),
       defaultValue: 'active'
+    },
+    balance: {
+      type: Sequelize.DECIMAL,
+      defaultValue: 100 / this.id
     }
   });
-
+  
   return User;
 
 }

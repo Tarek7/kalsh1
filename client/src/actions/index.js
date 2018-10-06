@@ -2,14 +2,16 @@ import { CLICK_UPDATE_VALUE } from './actionTypes';
 
 const users = [
   {
-    name: "User 1",
+    name: "Tarek",
     id: 1,
-    email: "user1@gmail.com"
+    email: "tmansour@mit.edu",
+    balance: 100
   },
   {
-    name: "User 2",
+    name: "Luana",
     id: 2,
-    email: "user2@gmail.com"
+    email: "luana@mit.edu",
+    balance: 50
   }
 ];
 
