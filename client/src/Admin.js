@@ -13,7 +13,10 @@ import NewBet from './NewBet';
 import PickUpBet from './PickUpBet';
 import classNames from 'classnames';
 import './Questions.css';
+<<<<<<< HEAD
 import qs from 'qs';
+=======
+>>>>>>> 063cdfb2e3f19b3373dfd45b42f58340d8bad11f
 
 const titles = {
   'all': 'All Questions',
@@ -126,6 +129,52 @@ class AdminBets extends Component {
     });
   }
 
+<<<<<<< HEAD
+=======
+  // renderBets() {
+  //   const { questions, isLoading, error } = this.state;
+  //   console.log(questions)
+  //
+  //   if (error === true) {
+  //     return(<div>An error ocurred. Please reload the page.</div>);
+  //   } else if (isLoading === true) {
+  //     return <MyLoader />;
+  //   } else if (questions.length > 0) {
+  //     return(
+  //       <div>
+  //          <ListGroup className="Mys">
+  //            {questions.map((question) => (
+  //              <ListGroupItem key={"question-" + question.id + "-" + question.option}>
+  //              <b>{question.title}</b>
+  //              <br />
+  //              {question.option === "yes" ?
+  //                <div>
+  //                  <span className="myBetsOption">YES</span>
+  //                  <span>{question.yes_odds_numerator} to {question.yes_odds_denominator}</span>
+  //                  <span>${question.amount}</span>
+  //                  <span><Moment format="MM/DD HH:mm">{question.question.settle_date}</Moment></span>
+  //                  <div className="myBetsResult">NOT SETTLED</div>
+  //                </div>
+  //              :
+  //                <div>
+  //                  <span className="myBetsOption">NO</span>
+  //                  <span>{question.yes_odds_denominator} to {question.yes_odds_numerator}</span>
+  //                  <span>${question.amount}</span>
+  //                  <span><Moment format="MM/DD HH:mm">{question.settle_date}</Moment></span>
+  //                  <div className="myBetsResult">NOT SETTLED</div>
+  //                </div>
+  //              }
+  //              </ListGroupItem>
+  //            ))}
+  //          </ListGroup>
+  //        </div>
+  //      );
+  //   } else {
+  //     return(<div>No bets.</div>);
+  //   }
+  // }
+
+>>>>>>> 063cdfb2e3f19b3373dfd45b42f58340d8bad11f
   renderQuestions() {
     const { error, isLoading, initialQuestions, questions, collapsedId } = this.state;
     if (error === true) {
@@ -154,7 +203,11 @@ class AdminBets extends Component {
                 </Col>
                 <Col md={6} className="betOptionColumn">
                   <h4>SETTLE FOR YES</h4>
+<<<<<<< HEAD
                   <Button onClick={() => this.settleQuestionYes(question, "yes")} className="buttonAddBet">Settle Yes</Button>
+=======
+                  <Button onClick={() => this.settleQuestionYes(question, "yes")} className="buttonAddBet">Settle</Button>
+>>>>>>> 063cdfb2e3f19b3373dfd45b42f58340d8bad11f
                   {question.primary_bets.filter(bet => bet.option === "no" && bet.available_amount > 0).map((bet) => (
                     <div className="betDetails" key={"betdetails-" + bet.id}>
                       <span className="oddsText">{bet.odds_denominator} to {bet.odds_numerator}</span>

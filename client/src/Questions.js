@@ -78,6 +78,7 @@ export default class Questions extends Component {
     })
     .catch(error => {
       console.log(error);
+      console.log(error.message);
       this.setState({ isLoading: false, error: true });
     });
   }
