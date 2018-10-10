@@ -57,7 +57,7 @@ module.exports = function(sequelize, Sequelize) {
       defaultValue: 100 / this.id
     }
   });
-  
+
   return User;
 
 }

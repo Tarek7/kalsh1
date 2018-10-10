@@ -53,20 +53,49 @@ var appRouter = function (app, passport) {
 
   app.post('/settle_yes', (req, res, next) => {
     console.log('Settling for yes');
-    console.log(req.params.question_primary_id)
     models.question.update({
         result: 'yes' }, { where: { id: req.body.question_primary_id }}
     )
-    console.log(models.question.findOne({where: {id: req.body.question_primary_id}}))
-    models.bet_primary.findAll({ where: { question_id: req.body.question_primary_id } })
+    models.bet_primary.findAll({ where: { question_id: req.body.question_primary_id }})
+    .then(bets => {
+      bets.forEach(bet => {
+      bet.update({settled: true })
+      })
+    })
+
+    models.match.findAll({ where: { question_id: req.body.question_primary_id }})
+    .then(bets => {
+      bets.forEach(bet => {
+      bet.update({settled: true })
+      })
+    })
+    // console.log(models.user.findAll())
+    // console.log("yooooooooooo")
+    models.bet_primary.findAll({ where: { question_id: req.body.question_primary_id}})
+    .then(bets => {
+      console.log(bets)
+      bets.forEach(bet => {
+      // console.log(bet.user_id)
+      // .then(use => {
+      //   var use_balance = use.balance
+      //   user.update({
+      //     balance: use_balance + (1 *int(bet.option === 'yes') - 1 * int(bet.option === 'no')) * (float(bet.odds_numerator) / float(bet.odds_denominator)) * bet.amount
+      //   })
+      // })
+
+      bet.update({resolved: true })
+      })
+    })
+
     res.status(200).json({ 'message': 'Ok' });
   });
 
   app.post('/settle_no', (req, res, next) => {
+    console.log('Settling for yes');
     models.question.update({
         result: 'no' }, { where: { id: req.body.question_primary_id }}
     )
-    console.log(models.question.findOne({where: {id: req.body.question_primary_id}}))
+    console.log(models.question.findOne({ where: { id: req.body.question_primary_id} }))
     models.bet_primary.findAll({ where: { question_id: req.body.question_primary_id } })
     res.status(200).json({ 'message': 'Ok' });
   });
@@ -77,7 +106,6 @@ var appRouter = function (app, passport) {
     };
 
     let matchesData = [];
-
     models.match.findAll({ where: { yes_user_id: req.query.user_id } })
     .then(matches => {
       matches.forEach(match => {

@@ -8,11 +8,7 @@ import Questions from './Questions';
 import SignUp from './SignUp';
 import Login from './Login';
 import MyBets from './MyBets';
-<<<<<<< HEAD
 import Admin from './Admin';
-=======
-import Admin from './Admin'
->>>>>>> 063cdfb2e3f19b3373dfd45b42f58340d8bad11f
 import { About, Contact, Faq, Help, NoMatch } from './StaticPages';
 import { Container } from 'reactstrap';
 import { Store } from './store';

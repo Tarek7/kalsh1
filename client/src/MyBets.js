@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { ListGroup, ListGroupItem, Col, Row, Button, Form, FormGroup, Label, Input, InputGroupAddon, InputGroup  } from 'reactstrap';
 import ContentLoader from "react-content-loader";
 import axios from 'axios';
 import Moment from 'react-moment';
@@ -30,8 +30,14 @@ class MyBets extends Component {
       isLoading: true,
       title: undefined,
       bets: [],
-			balance: 0
+			balance: 0,
+      showing_transfer_stuff: false,
+      displayingSuccess: false,
     }
+    this.renderBalance = this.renderBalance.bind(this);
+    this.setShowStuffToTrue = this.setShowStuffToTrue.bind(this);
+    this.moneyTransferRequest = this.moneyTransferRequest.bind(this);
+    // this.displayingSuccess = this.displayingSuccess.bind(this);
   }
 
   componentDidMount() {
@@ -46,7 +52,6 @@ class MyBets extends Component {
     }})
     .then(res => {
       const bets = res.data.bets;
-      console.log(bets);
       this.setState({ bets, isLoading: false });
     })
     .catch(error => {
@@ -54,6 +59,67 @@ class MyBets extends Component {
       this.setState({ isLoading: false, error: true });
     });
   }
+
+  setShowStuffToTrue() {
+    this.setState({showing_transfer_stuff: true});
+  }
+
+  moneyTransferRequest() {
+    this.setState({transfer_message: 'Transfer initaited: click here to see the transaction'})
+  }
+
+
+  renderBalance() {
+    if (this.state.showing_transfer_stuff == true) {
+    console.log('inside render balance')
+    const { currentUser } = this.props;
+    const { isLoading, error, balance } = this.state;
+    if (error === true) {
+     return (
+       <div>
+         <h4>Error!</h4>
+         <span className="closeBButton">x</span>
+       </div>
+      )
+    } else if (isLoading === false && balance != undefined) {
+      return (
+        <div>
+            <Row>
+              <Col xs={12}>
+                <h4>Transfer balance</h4>
+                <span className="closeButton">x</span>
+              </Col>
+            </Row>
+            <Form >
+              <Row>
+                <Col md={12}>
+                  <FormGroup>
+                    <Label for="amount">Amount</Label>
+                    <Input type="select" name="category" id="category" onChange={this.handleChange}>
+                      <option value="entertainment"> 1.00 </option>
+                      <option value="sports">Edit amount</option>
+                    </Input>
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="category">Stable coin wallet</Label>
+                    <Input type="select" name="category" id="category" onChange={this.handleChange}>
+                      <option value="entertainment">0x123f681646d4a755815f9cb19e1acc8565a0c2ac</option>
+                      <option value="sports">Add wallet</option>
+                    </Input>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <br/>
+            </Form>
+                          <button onClick={this.moneyTransferRequest}>Transfer Balance</button>
+                           <a href = 'https://etherscan.io/tx/0xcca83cd362e9a5af42ab4dc6a76286c68b2ee696a433908b376cb65fe6d968f9'>{this.state.transfer_message}</a>
+          </div>
+        )
+      }
+    }
+    }
 
   renderBets() {
     const { bets, isLoading, error } = this.state;
@@ -76,7 +142,7 @@ class MyBets extends Component {
                    <span>{bet.yes_odds_numerator} to {bet.yes_odds_denominator}</span>
                    <span>${bet.amount}</span>
                    <span><Moment format="MM/DD HH:mm">{bet.question.settle_date}</Moment></span>
-                   <div className="myBetsResult">NOT SETTLED</div>
+                   <div className="myBetsResult">{bet.settled ? "SETTLED": "NOT SETTLED"}</div>
                  </div>
                :
                  <div>
@@ -84,7 +150,7 @@ class MyBets extends Component {
                    <span>{bet.yes_odds_denominator} to {bet.yes_odds_numerator}</span>
                    <span>${bet.amount}</span>
                    <span><Moment format="MM/DD HH:mm">{bet.question.settle_date}</Moment></span>
-                   <div className="myBetsResult">NOT SETTLED</div>
+                   <div className="myBetsResult">{bet.settled ? "SETTLED": "NOT SETTLED"}</div>
                  </div>
                }
                </ListGroupItem>
@@ -97,42 +163,30 @@ class MyBets extends Component {
     }
   }
 
-	renderBalance() {
-		const { balance, isLoading, error } = this.state;
+	renderBalanceButton() {
+		const { bets, balance, isLoading, error } = this.state;
 		if (error === true) {
 			return (
 				<div>
 					<h4>Error!</h4>
-					<span className="closeBButton" onClick={this.props.close}>x</span>
+					<span className="closeBButton">x</span>
 				</div>
 			)
 		} else if (isLoading === false && balance != undefined) {
-					return (
-						<div className="Balance">
-							<Button>Balance: ${balance}</Button>
-						</div>
-					)
+			var augmentBal = false;
+			bets.map((bet => {
+				if (bet.settled) {
+					augmentBal = true;
 				}
+			}))
+			return (
+        <div className="Balance">
+          <button onClick={this.setShowStuffToTrue}> Balance: ${augmentBal ? balance + 10 : balance} </button>
+        </div>
+      )
 		}
-		// return (
-		// 	<div className="BalanceBg">
-		// 		<div className="Balance">
-		// 			{ error &&
-		// 				<div>
-		// 					<h4>Error!</h4>
-		// 					<span className="closeBButton" onClick={this.props.close}>x</span>
-		// 				</div>
-		// 			}
-		// 			{ !error && !isLoading
-		// 				<div>
-		// 						<Button>Suggest Question</Button>
-		// 				</div>
-		// 			}
-		// 			<div className="clearfix"></div>
-		// 		</div>
-		// 	</div>
-		// )
-	// }
+  }
+
 
   // TODO If category doesn't exist, redirect to home or 404 page.
   render() {
@@ -142,7 +196,8 @@ class MyBets extends Component {
           <h2>My Bets</h2>
         </div>
         { this.renderBets() }
-				{ this.renderBalance() }
+        { this.renderBalanceButton() }
+        { this.renderBalance() }
       </div>
     );
   }

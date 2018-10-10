@@ -32,6 +32,14 @@ module.exports = function(sequelize, Sequelize) {
     available_amount: {
       type: Sequelize.INTEGER, // TODO accept float
       notEmpty: true
+    },
+    settled: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    resolved: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
     }
   });
 
