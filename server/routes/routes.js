@@ -2,6 +2,7 @@ var sleep = require('sleep');
 const sequelize = require("sequelize");
 var authController = require('../controllers/authcontroller.js');
 var models = require("../models");
+const Op = sequelize.Op;
 
 var appRouter = function (app, passport) {
   app.get("/", function (req, res) {
@@ -56,33 +57,33 @@ var appRouter = function (app, passport) {
     models.question.update({
         result: 'yes' }, { where: { id: req.body.question_primary_id }}
     )
-    models.bet_primary.findAll({ where: { question_id: req.body.question_primary_id }})
-    .then(bets => {
-      bets.forEach(bet => {
-      bet.update({settled: true })
-      })
-    })
+    models.bet_primary.update({
+      settled: 'yes'}, { where: {question_id: req.body.question_primary_id}}
+    )
+    models.match.update({
+      settled: 'yes'}, { where: {question_id: req.body.question_primary_id}}
+    )
 
-    models.match.findAll({ where: { question_id: req.body.question_primary_id }})
-    .then(bets => {
-      bets.forEach(bet => {
-      bet.update({settled: true })
-      })
-    })
-    // console.log(models.user.findAll())
-    // console.log("yooooooooooo")
-    models.bet_primary.findAll({ where: { question_id: req.body.question_primary_id}})
+    // models.match.findAll({ where: { question_id: req.body.question_primary_id}})
+    // .then(matches => {
+    //   matches.forEach(matche => {
+    //     models.user.findAll({ where: { id: matche.yes_user_id}})
+    //     .then(users => {
+    //       console.log('USERS----------:\n', users)
+    //       users.forEach(yes_user => {
+    //         var prev_balance = yes_user.balance;
+    //         yes_user.update({
+    //           balance: prev_balance + matche.amount * (float(matche.yes_odds_numerator) / float(matche.yes_odds_denominator))
+    //         });
+    //       });
+    //     });
+    //   });
+    // });
+
+    models.user.findAll({ where: { question_id: req.body.question_primary_id}})
     .then(bets => {
       console.log(bets)
       bets.forEach(bet => {
-      // console.log(bet.user_id)
-      // .then(use => {
-      //   var use_balance = use.balance
-      //   user.update({
-      //     balance: use_balance + (1 *int(bet.option === 'yes') - 1 * int(bet.option === 'no')) * (float(bet.odds_numerator) / float(bet.odds_denominator)) * bet.amount
-      //   })
-      // })
-
       bet.update({resolved: true })
       })
     })
@@ -254,7 +255,7 @@ var appRouter = function (app, passport) {
   app.get('/signup', authController.signup);
   app.get('/signin', authController.signin);
   app.post('/signup', passport.authenticate('local-signup', {
-      successRedirect: '/rolou',
+      successRedirect: '/questions',
       failureRedirect: '/signup'
     }
   ));

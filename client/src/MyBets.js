@@ -173,15 +173,9 @@ class MyBets extends Component {
 				</div>
 			)
 		} else if (isLoading === false && balance != undefined) {
-			var augmentBal = false;
-			bets.map((bet => {
-				if (bet.settled) {
-					augmentBal = true;
-				}
-			}))
 			return (
         <div className="Balance">
-          <button onClick={this.setShowStuffToTrue}> Balance: ${augmentBal ? balance + 10 : balance} </button>
+          <button onClick={this.setShowStuffToTrue}> Balance: ${balance} </button>
         </div>
       )
 		}

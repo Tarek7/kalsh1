@@ -21,7 +21,7 @@ class SignUp extends Component {
           <Row form>
             <Col md={5}>
               <FormGroup>
-                <Label for="name">Name</Label>
+                <Label for="name">Full Name</Label>
                 <Input type="text" name="name" id="name" required />
               </FormGroup>
             </Col>

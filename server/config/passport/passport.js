@@ -12,6 +12,7 @@ module.exports = function(passport,user){
 
   // used to deserialize the user
   passport.deserializeUser(function(id, done) {
+    
     User.findById(id).then(function(user) {
       if(user){
         done(null, user.get());
@@ -41,15 +42,18 @@ module.exports = function(passport,user){
       User.findOne({where: {email:email}}).then(function(user){
 
         if(user)
-        {
-          return done(null, false, {message : 'That email is already taken'} );
-        }
 
-        else
+        {
+          return done(null, false, {
+            message : 'The email you provided is already taken'
+          });
+        } else
         {
           var userPassword = generateHash(password);
+
           var data =
-          { email:email,
+          {
+            email:email,
             password:userPassword,
             firstname: req.body.firstname,
             lastname: req.body.lastname

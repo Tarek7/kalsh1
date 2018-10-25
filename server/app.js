@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(session({
   secret: 'f29a0fa9g49s095gas0csa1g08',
   resave: true,
-  saveUninitialized:true })
+  saveUninitialized:true }) // Session secret.
 );
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
